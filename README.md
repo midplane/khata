@@ -101,6 +101,8 @@ new database version and a migration in `KhataDatabase`.
   suggested again.
 - Contacts are read through the system picker, which shares only the single contact you choose.
 
+Full details: [Privacy policy](PRIVACY.md).
+
 ## Contributing
 
 Issues and pull requests are welcome. Please keep changes focused, add a unit test for parsing or
