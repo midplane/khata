@@ -5,6 +5,9 @@ updates:
     schedule:
       interval: monthly
     groups:
+      # AGP, Kotlin, KSP and the Gradle wrapper must move together.
+      build-toolchain:
+        patterns: ["com.android.*", "org.jetbrains.kotlin*", "com.google.devtools.ksp*", "gradle-wrapper"]
       androidx:
         patterns: ["androidx.*"]
   - package-ecosystem: github-actions

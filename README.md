@@ -37,7 +37,7 @@ release and allow "install unknown apps" for the app you opened it from.
 
 ## Build
 
-Requirements: JDK 17 and the Android SDK (API 35). Android Studio works out of the box.
+Requirements: JDK 17+ and the Android SDK (compile SDK 37; the build downloads it if missing). Targets Android 16 (API 36), runs on Android 8.0+. Android Studio works out of the box.
 
 ```sh
 ./gradlew assembleDebug        # app/build/outputs/apk/debug/app-debug.apk

@@ -13,7 +13,7 @@ import java.util.Locale
 import kotlin.math.abs
 
 object Fmt {
-    private val india = Locale("en", "IN")
+    private val india = Locale.forLanguageTag("en-IN")
     private val whole = NumberFormat.getCurrencyInstance(india).apply { maximumFractionDigits = 0 }
     private val exact = NumberFormat.getCurrencyInstance(india).apply {
         minimumFractionDigits = 2; maximumFractionDigits = 2
