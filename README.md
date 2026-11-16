@@ -1,4 +1,8 @@
-# Khata खाता
+<p align="center">
+  <img src="docs/icon.png" width="128" alt="Khata app icon">
+</p>
+
+<h1 align="center">Khata खाता</h1>
 
 **A pocket ledger for professionals who get paid by clients.** Record what each client owes,
 tick off payments as they come in (in full or in parts), and see at a glance who still owes
