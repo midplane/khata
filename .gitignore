@@ -1,7 +1,18 @@
-.gradle/
+# Build output
 build/
+.gradle/
+.kotlin/
+*.apk
+*.aab
+
+# Local machine config
 local.properties
 .idea/
 *.iml
 .DS_Store
-.kotlin/
+
+# Release signing — never commit these
+keystore/
+keystore.properties
+*.jks
+*.keystore

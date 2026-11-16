@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Themed-icon (Android 13+) version. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#FFFFFFFF" android:pathData="M71.3 29V30.77H55.19Q63.07 32.45 64.4 39.88H71.3V41.65H64.66V42.54Q64.66 48.47 59.71 51.65Q54.75 54.84 46.43 55.37V55.72Q50.95 56.34 53.78 58.73Q56.61 61.12 57.72 64Q58.82 66.87 59.62 69.71Q60.42 72.54 61.79 74.44Q63.16 76.34 65.33 76.34Q67.49 76.34 68.82 75.55L69.35 76.79Q66.52 78.91 60.99 78.91Q55.46 78.91 51.88 76.74Q48.29 74.57 46.74 71.39Q45.2 68.2 44.13 64.93Q41.66 56.7 37.5 55.55V53.78H40.24Q52.45 53.78 52.45 42.54V41.65H36.7V39.88H52.27Q51.21 30.77 41.57 30.77H36.7V29Z"/>
+</vector>

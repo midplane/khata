@@ -1,20 +1,64 @@
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.util.Properties
+
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose")
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+}
+
+/*
+ * Versioning: derived from the UTC time of the latest git commit, so every build of a commit
+ * gets the same version.
+ *   versionName = yymmdd.HHMM               e.g. 261116.1930
+ *   versionCode = minutes since 2020-01-01  (always increasing; fits Android's int limit)
+ * Falls back to the current time when git history isn't available (e.g. a source tarball).
+ */
+val versionTime: Instant = runCatching {
+    providers.exec {
+        commandLine("git", "log", "-1", "--format=%ct")
+        isIgnoreExitValue = true
+    }.standardOutput.asText.get().trim().toLong().let(Instant::ofEpochSecond)
+}.getOrElse { Instant.now() }
+
+val appVersionName: String =
+    DateTimeFormatter.ofPattern("yyMMdd.HHmm").withZone(ZoneOffset.UTC).format(versionTime)
+val appVersionCode: Int =
+    ((versionTime.epochSecond - Instant.parse("2020-01-01T00:00:00Z").epochSecond) / 60).toInt()
+
+/*
+ * Release signing: create keystore.properties in the repo root (git-ignored), see README.
+ * Without it, release builds are signed with the local debug key.
+ */
+val keystoreProps = Properties().apply {
+    val f = rootProject.file("keystore.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
 }
 
 android {
-    namespace = "app.khata"
+    namespace = "dev.midplane.khata"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "app.khata"
+        applicationId = "dev.midplane.khata"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = appVersionCode
+        versionName = appVersionName
+    }
+
+    signingConfigs {
+        if (keystoreProps.isNotEmpty()) {
+            create("release") {
+                storeFile = rootProject.file(keystoreProps.getProperty("storeFile"))
+                storePassword = keystoreProps.getProperty("storePassword")
+                keyAlias = keystoreProps.getProperty("keyAlias")
+                keyPassword = keystoreProps.getProperty("keyPassword")
+            }
+        }
     }
 
     buildTypes {
@@ -22,8 +66,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // Signed with the debug key so the release APK is installable locally.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -38,22 +81,24 @@ android {
     }
 }
 
+ksp {
+    // Exported Room schemas are committed so database migrations can be reviewed and tested.
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
-    val composeBom = platform("androidx.compose:compose-bom:2025.04.01")
-    implementation(composeBom)
-    implementation("androidx.core:core-ktx:1.15.0")
-    implementation("androidx.activity:activity-compose:1.10.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
-    implementation("androidx.navigation:navigation-compose:2.8.9")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    debugImplementation("androidx.compose.ui:ui-tooling")
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.navigation.compose)
 
-    implementation("androidx.room:room-runtime:2.7.2")
-    implementation("androidx.room:room-ktx:2.7.2")
-    ksp("androidx.room:room-compiler:2.7.2")
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
-    testImplementation("junit:junit:4.13.2")
+    testImplementation(libs.junit)
 }
