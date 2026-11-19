@@ -88,4 +88,6 @@ visible in the repository.
 
 ## Contact
 
-Questions or concerns: open an issue at <https://github.com/midplane/khata/issues>.
+For privacy questions or grievances, email the Khata developer at <zodvik@gmail.com>.
+
+For general feedback or bug reports, open an issue at <https://github.com/midplane/khata/issues>.
