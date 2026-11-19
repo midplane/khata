@@ -56,6 +56,11 @@ android {
                 storePassword = keystoreProps.getProperty("storePassword")
                 keyAlias = keystoreProps.getProperty("keyAlias")
                 keyPassword = keystoreProps.getProperty("keyPassword")
+                // Sign with every scheme: some app stores require the legacy v1 (JAR) signature too,
+                // which AGP otherwise skips for minSdk >= 24.
+                enableV1Signing = true
+                enableV2Signing = true
+                enableV3Signing = true
             }
         }
     }
